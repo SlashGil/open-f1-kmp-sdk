@@ -38,7 +38,7 @@ jobs:
 
       - name: Step 3 - Publish to Maven Central (Sonatype Central Portal)
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
-        run: ./gradlew openf1-sdk:publishToMavenCentral
+        run: ./gradlew openf1-sdk:publishToMavenCentral --no-configuration-cache
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_TOKEN_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_TOKEN_PASSWORD }}
