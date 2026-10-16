@@ -27,5 +27,4 @@ dependencyResolutionManagement {
     }
 }
 
-include(":server")
 include(":openf1-sdk")

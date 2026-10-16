@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.androidLibrary)
     id("maven-publish")
 }
 
@@ -8,7 +9,17 @@ group = "org.openf1"
 version = "1.0.0-SNAPSHOT"
 
 kotlin {
-    jvm()
+    jvm {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
+    androidTarget {
+        publishLibraryVariants("release")
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
 
     iosX64()
     iosArm64()
@@ -41,6 +52,10 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
         }
 
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+
         jvmMain.dependencies {
             implementation(libs.ktor.client.cio)
         }
@@ -52,6 +67,20 @@ kotlin {
         jsMain.dependencies {
             implementation(libs.ktor.client.js)
         }
+    }
+}
+
+android {
+    namespace = "org.openf1"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
