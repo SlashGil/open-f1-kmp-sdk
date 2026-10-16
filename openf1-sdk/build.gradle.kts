@@ -1,12 +1,15 @@
+import org.gradle.plugins.signing.SigningExtension
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.detekt)
     id("maven-publish")
+    id("signing")
 }
 
-group = "com.slashgil.openf1"
+group = "io.github.slashgil.openf1"
 version = "1.0.0-SNAPSHOT"
 
 kotlin {
@@ -72,7 +75,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.slashgil.openf1"
+    namespace = "io.github.slashgil.openf1"
     compileSdk = 35
 
     defaultConfig {
@@ -97,7 +100,60 @@ detekt {
 }
 
 publishing {
-    publications {
-        // KMP plugin creates maven publications automatically
+    publications.withType<MavenPublication> {
+        pom {
+            name.set("OpenF1 Kotlin Multiplatform SDK")
+            description.set("Strongly-typed Kotlin Multiplatform wrapper for the OpenF1 REST API.")
+            url.set("https://github.com/slashgil/open-f1")
+
+            licenses {
+                license {
+                    name.set("MIT License")
+                    url.set("https://opensource.org/licenses/MIT")
+                }
+            }
+
+            developers {
+                developer {
+                    id.set("slashgil")
+                    name.set("SlashGil")
+                    url.set("https://github.com/slashgil")
+                }
+            }
+
+            scm {
+                connection.set("scm:git:git://github.com/slashgil/open-f1.git")
+                developerConnection.set("scm:git:ssh://github.com/slashgil/open-f1.git")
+                url.set("https://github.com/slashgil/open-f1")
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "SonatypeCentral"
+            url = uri("https://central.sonatype.com/api/v1/publisher/deployments/upload")
+            credentials {
+                username = System.getenv("SONATYPE_TOKEN_USERNAME")
+                password = System.getenv("SONATYPE_TOKEN_PASSWORD")
+            }
+        }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/slashgil/open-f1")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR") ?: providers.gradleProperty("gpr.user").orNull
+                password = System.getenv("GITHUB_TOKEN") ?: providers.gradleProperty("gpr.key").orNull
+            }
+        }
+    }
+}
+
+configure<SigningExtension> {
+    val secretKey = System.getenv("GPG_PRIVATE_KEY")
+    val passphrase = System.getenv("GPG_PASSPHRASE")
+    if (!secretKey.isNullOrEmpty()) {
+        useInMemoryPgpKeys(secretKey, passphrase)
+        sign(publishing.publications)
     }
 }
