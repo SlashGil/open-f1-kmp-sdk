@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.detekt)
     id("maven-publish")
 }
 
@@ -82,6 +83,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    lint {
+        abortOnError = true
+        warningsAsErrors = false
+    }
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = false
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
 
 publishing {

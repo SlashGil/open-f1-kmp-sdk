@@ -1,6 +1,6 @@
 # OpenF1 Kotlin Multiplatform SDK
 
-A strongly-typed, pure data layer Kotlin Multiplatform (KMP) SDK for the [OpenF1 REST API](https://api.openf1.org/v1/).
+A strongly-typed, pure data layer Kotlin Multiplatform (KMP) SDK for the complete [OpenF1 REST API](https://openf1.org/docs/#api-endpoints).
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue.svg?logo=kotlin)](https://kotlinlang.org)
 [![Ktor](https://img.shields.io/badge/Ktor-3.1.1-orange.svg)](https://ktor.io)
@@ -18,17 +18,43 @@ A strongly-typed, pure data layer Kotlin Multiplatform (KMP) SDK for the [OpenF1
 
 ---
 
-## 📡 Supported OpenF1 Endpoints
+## 📡 Official OpenF1 API Endpoints Covered
 
-This SDK provides strongly-typed models and suspend functions for the OpenF1 v1 API endpoints:
+This SDK provides 100% complete coverage for all official endpoints documented in [openf1.org/docs/#api-endpoints](https://openf1.org/docs/#api-endpoints):
 
-| Endpoint | Method | SDK Function | Description |
-| :--- | :--- | :--- | :--- |
-| `/drivers` | `GET` | `getDrivers(...)` | Driver profiles, acronyms, team colors, and headshot URLs. |
-| `/laps` | `GET` | `getLaps(...)` | Detailed lap timing, sector durations, speeds, and segment data. |
-| `/pit_stops` | `GET` | `getPitStops(...)` | Pit stop events, stop numbers, and pit duration. |
-| `/stints` | `GET` | `getStints(...)` | Tyre stints, compounds (SOFT, MEDIUM, HARD), and tyre age. |
-| `/team_radio` | `GET` | `getTeamRadio(...)` | Team radio audio recording URLs and metadata. |
+| # | Endpoint | Method | SDK Function (`org.openf1.contract.OpenF1Client`) | Description |
+| :-: | :--- | :-: | :--- | :--- |
+| **1** | `/car_data` | `GET` | `getCarData(...)` | Live car telemetry (speed, RPM, gear, throttle, brake, DRS) at ~3.7 Hz. |
+| **2** | `/championship_drivers` | `GET` | `getChampionshipDrivers(...)` | Drivers' championship standings during or after race sessions. |
+| **3** | `/championship_teams` | `GET` | `getChampionshipTeams(...)` | Teams' championship standings during or after race sessions. |
+| **4** | `/drivers` | `GET` | `getDrivers(...)` | Driver profiles, acronyms, team names, colors, and headshots. |
+| **5** | `/intervals` | `GET` | `getIntervals(...)` | Real-time gaps and interval times between drivers. |
+| **6** | `/laps` | `GET` | `getLaps(...)` | Sector times, lap durations, speeds, and pit-out status. |
+| **7** | `/location` | `GET` | `getLocation(...)` | 3D Cartesian spatial coordinates (X, Y, Z) of cars on track. |
+| **8** | `/meetings` | `GET` | `getMeetings(...)` | Grand Prix / testing event weekend metadata, locations, and circuit keys. |
+| **9** | `/overtakes` | `GET` | `getOvertakes(...)` | Position changes and overtake records during races. |
+| **10** | `/pit` | `GET` | `getPit(...)` | Pit stop events, stop durations, and pit lane durations. |
+| **11** | `/pit_stops` | `GET` | `getPitStops(...)` | Convenience alias for pit stop events. |
+| **12** | `/position` | `GET` | `getPosition(...)` | Driver position history throughout a session. |
+| **13** | `/race_control` | `GET` | `getRaceControl(...)` | Flags, safety car messages, investigations, and track status. |
+| **14** | `/sessions` | `GET` | `getSessions(...)` | Session metadata (Practice, Qualifying, Sprint, Race). |
+| **15** | `/stints` | `GET` | `getStints(...)` | Tyre stints, compounds (SOFT, MEDIUM, HARD), and tyre age. |
+| **16** | `/team_radio` | `GET` | `getTeamRadio(...)` | Team radio audio recording URLs and timestamps. |
+| **17** | `/weather` | `GET` | `getWeather(...)` | Air/track temperature, humidity, wind, and rainfall. |
+
+> 💡 **Tip:** `sessionKey` and `meetingKey` parameters accept both `Int` keys (e.g. `9158`) and the `"latest"` string keyword!
+
+---
+
+## 🏛 Architecture & Packages
+
+```
+org.openf1
+├── contract/     # API interface contracts (OpenF1Client)
+├── impl/         # Concrete client implementations (DefaultOpenF1Client)
+├── model/        # @Serializable DTO data classes (CarData, Driver, Lap, etc.)
+└── exception/    # Custom exceptions (OpenF1Exception)
+```
 
 ---
 
@@ -52,122 +78,42 @@ dependencies {
 
 ---
 
-## 💡 Quickstart & Code Examples
-
-### Initializing the Client
+## 💡 Quickstart Examples
 
 ```kotlin
-import org.openf1.client.OpenF1Client
+import org.openf1.contract.OpenF1Client
 
-// Create a client with default settings
 val client = OpenF1Client()
-```
 
----
+// 1. Fetch Drivers using "latest" session keyword
+val drivers = client.getDrivers(sessionKey = "latest")
 
-### 1. Fetch Drivers (`GET /drivers`)
+// 2. Fetch Championship Standings
+val standings = client.getChampionshipDrivers(sessionKey = "latest")
 
-```kotlin
-// Get drivers for session 9158 (e.g. Hamilton, Verstappen, etc.)
-val drivers = client.getDrivers(sessionKey = 9158)
+// 3. Fetch Overtakes
+val overtakes = client.getOvertakes(sessionKey = "latest")
 
-drivers.forEach { driver ->
-    println("#${driver.driverNumber} - ${driver.fullName} (${driver.teamName})")
-}
-```
+// 4. Fetch Car Telemetry (Speed, RPM, Gear)
+val carData = client.getCarData(sessionKey = 9158, driverNumber = 1)
 
----
+// 5. Fetch Weather Data
+val weather = client.getWeather(sessionKey = 9158)
 
-### 2. Fetch Lap Times (`GET /laps`)
-
-```kotlin
-// Get lap timing data for a specific driver and session
-val laps = client.getLaps(
-    sessionKey = 9158,
-    driverNumber = 1,
-    lapNumber = 12
-)
-
-laps.forEach { lap ->
-    println("Lap ${lap.lapNumber}: ${lap.lapDuration}s (S1: ${lap.durationSector1}s, S2: ${lap.durationSector2}s, S3: ${lap.durationSector3}s)")
-}
-```
-
----
-
-### 3. Fetch Pit Stops (`GET /pit_stops`)
-
-```kotlin
-// Get pit stop events
-val pitStops = client.getPitStops(sessionKey = 9158)
-
-pitStops.forEach { pit ->
-    println("Driver #${pit.driverNumber} - Stop #${pit.stopNumber} on lap ${pit.lapNumber}: ${pit.pitDuration}s")
-}
-```
-
----
-
-### 4. Fetch Tyre Stints (`GET /stints`)
-
-```kotlin
-// Get stint and tyre compound information
-val stints = client.getStints(sessionKey = 9158)
-
-stints.forEach { stint ->
-    println("Driver #${stint.driverNumber} - Stint ${stint.stintNumber}: ${stint.compound} (Laps ${stint.lapStart} to ${stint.lapEnd})")
-}
-```
-
----
-
-### 5. Fetch Team Radio (`GET /team_radio`)
-
-```kotlin
-// Get team radio recording URLs
-val teamRadioEntries = client.getTeamRadio(sessionKey = 9158, driverNumber = 55)
-
-teamRadioEntries.forEach { radio ->
-    println("Driver #${radio.driverNumber} Radio URL: ${radio.recordingUrl}")
-}
-```
-
----
-
-### Error Handling
-
-All requests throw an `OpenF1Exception` in case of HTTP error codes or network issues:
-
-```kotlin
-import org.openf1.exception.OpenF1Exception
-
-try {
-    val drivers = client.getDrivers(sessionKey = 9158)
-} catch (e: OpenF1Exception) {
-    println("API Error [${e.statusCode}]: ${e.message}")
-}
-```
-
----
-
-### Closing the Client
-
-`OpenF1Client` implements `AutoCloseable`, so you can close it when finished or scope it using `.use { }`:
-
-```kotlin
+// Close client when finished
 client.close()
 ```
 
 ---
 
-## 🛠️ Building & Publishing
+## 🛠️ Building & Testing
 
 ### Run Unit Tests
 ```bash
 ./gradlew openf1-sdk:jvmTest
 ```
 
-### Publish to Maven Local
+### Publish Locally
 ```bash
 ./gradlew publishToMavenLocal
 ```

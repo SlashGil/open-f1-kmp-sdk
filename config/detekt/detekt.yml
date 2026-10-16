@@ -1,0 +1,10 @@
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 160
+  MagicNumber:
+    active: false
