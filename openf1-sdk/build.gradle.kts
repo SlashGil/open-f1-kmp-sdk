@@ -6,7 +6,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "org.openf1"
+group = "com.slashgil.openf1"
 version = "1.0.0-SNAPSHOT"
 
 kotlin {
@@ -72,7 +72,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.openf1"
+    namespace = "com.slashgil.openf1"
     compileSdk = 35
 
     defaultConfig {

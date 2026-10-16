@@ -1,0 +1,41 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-test-publish:
+    name: Lint, Test and Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Make Gradle Wrapper Executable
+        run: chmod +x gradlew
+
+      - name: Step 1 - Static Code Analysis (Detekt & Android Lint)
+        run: ./gradlew openf1-sdk:detekt openf1-sdk:lintRelease
+
+      - name: Step 2 - Unit Tests
+        run: ./gradlew openf1-sdk:jvmTest
+
+      - name: Step 3 - Publish Library
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
+        run: ./gradlew openf1-sdk:publishToMavenLocal
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
