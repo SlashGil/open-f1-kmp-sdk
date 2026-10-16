@@ -138,14 +138,6 @@ publishing {
                 password = System.getenv("SONATYPE_TOKEN_PASSWORD")
             }
         }
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/slashgil/open-f1")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: providers.gradleProperty("gpr.user").orNull
-                password = System.getenv("GITHUB_TOKEN") ?: providers.gradleProperty("gpr.key").orNull
-            }
-        }
     }
 }
 
