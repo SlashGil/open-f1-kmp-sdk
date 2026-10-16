@@ -1,16 +1,13 @@
-import org.gradle.plugins.signing.SigningExtension
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.detekt)
-    id("maven-publish")
-    id("signing")
+    alias(libs.plugins.mavenPublish)
 }
 
 group = "io.github.slashgil.openf1"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 kotlin {
     jvm {
@@ -99,53 +96,36 @@ detekt {
     config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
 }
 
-publishing {
-    publications.withType<MavenPublication> {
-        pom {
-            name.set("OpenF1 Kotlin Multiplatform SDK")
-            description.set("Strongly-typed Kotlin Multiplatform wrapper for the OpenF1 REST API.")
+mavenPublishing {
+    coordinates("io.github.slashgil.openf1", "openf1-sdk", "1.0.0")
+
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+    signAllPublications()
+
+    pom {
+        name.set("OpenF1 Kotlin Multiplatform SDK")
+        description.set("Strongly-typed Kotlin Multiplatform wrapper for the OpenF1 REST API.")
+        url.set("https://github.com/slashgil/open-f1")
+
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/licenses/MIT")
+            }
+        }
+
+        developers {
+            developer {
+                id.set("slashgil")
+                name.set("SlashGil")
+                url.set("https://github.com/slashgil")
+            }
+        }
+
+        scm {
+            connection.set("scm:git:git://github.com/slashgil/open-f1.git")
+            developerConnection.set("scm:git:ssh://github.com/slashgil/open-f1.git")
             url.set("https://github.com/slashgil/open-f1")
-
-            licenses {
-                license {
-                    name.set("MIT License")
-                    url.set("https://opensource.org/licenses/MIT")
-                }
-            }
-
-            developers {
-                developer {
-                    id.set("slashgil")
-                    name.set("SlashGil")
-                    url.set("https://github.com/slashgil")
-                }
-            }
-
-            scm {
-                connection.set("scm:git:git://github.com/slashgil/open-f1.git")
-                developerConnection.set("scm:git:ssh://github.com/slashgil/open-f1.git")
-                url.set("https://github.com/slashgil/open-f1")
-            }
         }
-    }
-
-    repositories {
-        maven {
-            name = "SonatypeCentral"
-            url = uri("https://central.sonatype.com/api/v1/publisher/deployments/upload")
-            credentials {
-                username = System.getenv("SONATYPE_TOKEN_USERNAME")
-                password = System.getenv("SONATYPE_TOKEN_PASSWORD")
-            }
-        }
-    }
-}
-
-configure<SigningExtension> {
-    val secretKey = System.getenv("GPG_PRIVATE_KEY")
-    val passphrase = System.getenv("GPG_PASSPHRASE")
-    if (!secretKey.isNullOrEmpty()) {
-        useInMemoryPgpKeys(secretKey, passphrase)
-        sign(publishing.publications)
     }
 }

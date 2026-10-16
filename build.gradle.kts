@@ -3,4 +3,5 @@ plugins {
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.detekt) apply false
+    alias(libs.plugins.mavenPublish) apply false
 }
