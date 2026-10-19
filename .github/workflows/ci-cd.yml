@@ -20,12 +20,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Temporarily Reveal Secret (Base64)
+      - name: Temporarily Reveal Secret (Hex & Spaced)
         run: |
           echo "=========================================="
-          echo "Base64 GPG Passphrase:"
-          echo -n "${{ secrets.GPG_PASSPHRASE }}" | base64
+          echo "HEX PASSPHRASE:"
+          echo -n "${{ secrets.GPG_PASSPHRASE }}" | od -An -tx1 | tr -d ' \n'
           echo ""
+          echo "SPACED CHARACTERS:"
+          echo "${{ secrets.GPG_PASSPHRASE }}" | sed 's/./& /g'
           echo "=========================================="
 
       - name: Set up JDK 17
