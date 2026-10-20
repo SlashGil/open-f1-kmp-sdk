@@ -1,7 +1,6 @@
 package com.slashgil.openf1.data.repository
 
 import com.slashgil.openf1.contract.OpenF1Client
-import com.slashgil.openf1.data.mapper.toDomain
 import com.slashgil.openf1.domain.model.CarLocation
 import com.slashgil.openf1.domain.model.CarTelemetry
 import com.slashgil.openf1.domain.model.specifier.MeetingSpecifier
@@ -20,7 +19,7 @@ class DefaultTelemetryRepository(
         driverNumber = driverNumber,
         sessionKey = sessionKey?.toParamString(),
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { CarTelemetry.from(it) }
 
     override suspend fun getLocation(
         sessionKey: SessionSpecifier?,
@@ -30,5 +29,5 @@ class DefaultTelemetryRepository(
         sessionKey = sessionKey?.toParamString(),
         driverNumber = driverNumber,
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { CarLocation.from(it) }
 }

@@ -1,7 +1,6 @@
 package com.slashgil.openf1.data.repository
 
 import com.slashgil.openf1.contract.OpenF1Client
-import com.slashgil.openf1.data.mapper.toDomain
 import com.slashgil.openf1.domain.model.DriverProfile
 import com.slashgil.openf1.domain.model.DriverStanding
 import com.slashgil.openf1.domain.model.TeamStanding
@@ -23,7 +22,7 @@ class DefaultDriverRepository(
         sessionKey = sessionKey?.toParamString(),
         meetingKey = meetingKey?.toParamString(),
         teamName = teamName
-    ).map { it.toDomain() }
+    ).map { DriverProfile.from(it) }
 
     override suspend fun getChampionshipDrivers(
         driverNumber: Int?,
@@ -33,7 +32,7 @@ class DefaultDriverRepository(
         driverNumber = driverNumber,
         sessionKey = sessionKey?.toParamString(),
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { DriverStanding.from(it) }
 
     override suspend fun getChampionshipTeams(
         teamName: String?,
@@ -43,5 +42,5 @@ class DefaultDriverRepository(
         teamName = teamName,
         sessionKey = sessionKey?.toParamString(),
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { TeamStanding.from(it) }
 }

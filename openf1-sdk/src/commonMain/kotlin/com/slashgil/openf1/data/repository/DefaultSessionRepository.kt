@@ -1,7 +1,6 @@
 package com.slashgil.openf1.data.repository
 
 import com.slashgil.openf1.contract.OpenF1Client
-import com.slashgil.openf1.data.mapper.toDomain
 import com.slashgil.openf1.domain.model.GrandPrixMeeting
 import com.slashgil.openf1.domain.model.RaceSession
 import com.slashgil.openf1.domain.model.specifier.MeetingSpecifier
@@ -24,7 +23,7 @@ class DefaultSessionRepository(
         year = year,
         sessionName = sessionName,
         sessionType = sessionType
-    ).map { it.toDomain() }
+    ).map { RaceSession.from(it) }
 
     override suspend fun getMeetings(
         meetingKey: MeetingSpecifier?,
@@ -36,5 +35,5 @@ class DefaultSessionRepository(
         year = year,
         countryName = countryName,
         countryCode = countryCode
-    ).map { it.toDomain() }
+    ).map { GrandPrixMeeting.from(it) }
 }

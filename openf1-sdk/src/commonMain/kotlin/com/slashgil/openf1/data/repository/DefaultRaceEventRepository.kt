@@ -1,7 +1,6 @@
 package com.slashgil.openf1.data.repository
 
 import com.slashgil.openf1.contract.OpenF1Client
-import com.slashgil.openf1.data.mapper.toDomain
 import com.slashgil.openf1.domain.model.DriverInterval
 import com.slashgil.openf1.domain.model.DriverPosition
 import com.slashgil.openf1.domain.model.LapTiming
@@ -28,7 +27,7 @@ class DefaultRaceEventRepository(
         sessionKey = sessionKey?.toParamString(),
         driverNumber = driverNumber,
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { DriverInterval.from(it) }
 
     override suspend fun getLaps(
         sessionKey: SessionSpecifier?,
@@ -40,7 +39,7 @@ class DefaultRaceEventRepository(
         driverNumber = driverNumber,
         lapNumber = lapNumber,
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { LapTiming.from(it) }
 
     override suspend fun getOvertakes(
         sessionKey: SessionSpecifier?,
@@ -54,7 +53,7 @@ class DefaultRaceEventRepository(
         overtakingDriverNumber = overtakingDriverNumber,
         overtakenDriverNumber = overtakenDriverNumber,
         position = position
-    ).map { it.toDomain() }
+    ).map { OvertakeEvent.from(it) }
 
     override suspend fun getPit(
         sessionKey: SessionSpecifier?,
@@ -64,7 +63,7 @@ class DefaultRaceEventRepository(
         sessionKey = sessionKey?.toParamString(),
         driverNumber = driverNumber,
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { PitLaneEntry.from(it) }
 
     override suspend fun getPitStops(
         sessionKey: SessionSpecifier?,
@@ -74,7 +73,7 @@ class DefaultRaceEventRepository(
         sessionKey = sessionKey?.toParamString(),
         driverNumber = driverNumber,
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { PitStop.from(it) }
 
     override suspend fun getPosition(
         sessionKey: SessionSpecifier?,
@@ -86,7 +85,7 @@ class DefaultRaceEventRepository(
         driverNumber = driverNumber,
         meetingKey = meetingKey?.toParamString(),
         position = position
-    ).map { it.toDomain() }
+    ).map { DriverPosition.from(it) }
 
     override suspend fun getRaceControl(
         sessionKey: SessionSpecifier?,
@@ -100,7 +99,7 @@ class DefaultRaceEventRepository(
         meetingKey = meetingKey?.toParamString(),
         flag = flag,
         category = category
-    ).map { it.toDomain() }
+    ).map { RaceControlMessage.from(it) }
 
     override suspend fun getStints(
         sessionKey: SessionSpecifier?,
@@ -112,7 +111,7 @@ class DefaultRaceEventRepository(
         driverNumber = driverNumber,
         meetingKey = meetingKey?.toParamString(),
         stintNumber = stintNumber
-    ).map { it.toDomain() }
+    ).map { TyreStint.from(it) }
 
     override suspend fun getTeamRadio(
         sessionKey: SessionSpecifier?,
@@ -122,7 +121,7 @@ class DefaultRaceEventRepository(
         sessionKey = sessionKey?.toParamString(),
         driverNumber = driverNumber,
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { TeamRadioMessage.from(it) }
 
     override suspend fun getWeather(
         sessionKey: SessionSpecifier?,
@@ -130,5 +129,5 @@ class DefaultRaceEventRepository(
     ): List<TrackWeather> = client.getWeather(
         sessionKey = sessionKey?.toParamString(),
         meetingKey = meetingKey?.toParamString()
-    ).map { it.toDomain() }
+    ).map { TrackWeather.from(it) }
 }
