@@ -263,4 +263,17 @@ class UseCasesTest {
         assertEquals(1, leaderboard.entries.size)
         assertEquals("Max VERSTAPPEN", leaderboard.entries.first().driver?.fullName)
     }
+
+    @Test
+    fun testGetUseCaseAsResult() = runTest {
+        val json = """[{"driver_number": 1, "speed": 315}]"""
+        val client = createTestClient(json)
+        val repo = DefaultTelemetryRepository(client)
+        val useCase = GetCarDataUseCase(repo)
+
+        val result = useCase.asResult(driverNumber = 1)
+        kotlin.test.assertTrue(result is com.slashgil.openf1.domain.result.Result.Success)
+        assertEquals(1, result.data.size)
+        assertEquals(315, result.data.first().speed)
+    }
 }
