@@ -1,5 +1,6 @@
 package com.slashgil.openf1.domain.model
 
+import com.slashgil.openf1.model.Location
 import kotlinx.datetime.Instant
 
 data class CarLocation(
@@ -10,4 +11,16 @@ data class CarLocation(
     val y: Int?,
     val z: Int?,
     val date: Instant?
-)
+) {
+    companion object {
+        fun from(dto: Location): CarLocation = CarLocation(
+            driverNumber = dto.driverNumber,
+            sessionKey = dto.sessionKey,
+            meetingKey = dto.meetingKey,
+            x = dto.x,
+            y = dto.y,
+            z = dto.z,
+            date = dto.date.toInstantOrNull()
+        )
+    }
+}

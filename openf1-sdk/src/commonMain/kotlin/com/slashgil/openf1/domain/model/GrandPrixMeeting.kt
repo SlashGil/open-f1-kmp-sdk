@@ -1,5 +1,6 @@
 package com.slashgil.openf1.domain.model
 
+import com.slashgil.openf1.model.Meeting
 import kotlinx.datetime.Instant
 
 data class GrandPrixMeeting(
@@ -18,4 +19,24 @@ data class GrandPrixMeeting(
     val isCancelled: Boolean?,
     val dateStart: Instant?,
     val dateEnd: Instant?
-)
+) {
+    companion object {
+        fun from(dto: Meeting): GrandPrixMeeting = GrandPrixMeeting(
+            meetingKey = dto.meetingKey,
+            meetingName = dto.meetingName,
+            meetingOfficialName = dto.meetingOfficialName,
+            circuitKey = dto.circuitKey,
+            circuitShortName = dto.circuitShortName,
+            circuitType = dto.circuitType,
+            countryCode = dto.countryCode,
+            countryKey = dto.countryKey,
+            countryName = dto.countryName,
+            gmtOffset = dto.gmtOffset,
+            location = dto.location,
+            year = dto.year,
+            isCancelled = dto.isCancelled,
+            dateStart = dto.dateStart.toInstantOrNull(),
+            dateEnd = dto.dateEnd.toInstantOrNull()
+        )
+    }
+}

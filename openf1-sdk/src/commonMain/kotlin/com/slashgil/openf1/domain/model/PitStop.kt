@@ -1,5 +1,6 @@
 package com.slashgil.openf1.domain.model
 
+import com.slashgil.openf1.model.PitStop as PitStopDto
 import kotlinx.datetime.Instant
 
 data class PitStop(
@@ -10,4 +11,16 @@ data class PitStop(
     val sessionKey: Int?,
     val meetingKey: Int?,
     val date: Instant?
-)
+) {
+    companion object {
+        fun from(dto: PitStopDto): PitStop = PitStop(
+            driverNumber = dto.driverNumber,
+            lapNumber = dto.lapNumber,
+            stopNumber = dto.stopNumber,
+            pitDuration = dto.pitDuration,
+            sessionKey = dto.sessionKey,
+            meetingKey = dto.meetingKey,
+            date = dto.date.toInstantOrNull()
+        )
+    }
+}

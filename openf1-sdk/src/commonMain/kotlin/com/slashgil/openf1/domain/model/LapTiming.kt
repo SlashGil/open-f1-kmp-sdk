@@ -1,5 +1,6 @@
 package com.slashgil.openf1.domain.model
 
+import com.slashgil.openf1.model.Lap
 import kotlinx.datetime.Instant
 import kotlin.math.roundToInt
 
@@ -41,4 +42,25 @@ data class LapTiming(
                 "$secs.$fracStr"
             }
         }
+
+    companion object {
+        fun from(dto: Lap): LapTiming = LapTiming(
+            driverNumber = dto.driverNumber,
+            lapNumber = dto.lapNumber,
+            sessionKey = dto.sessionKey,
+            meetingKey = dto.meetingKey,
+            lapDuration = dto.lapDuration,
+            durationSector1 = dto.durationSector1,
+            durationSector2 = dto.durationSector2,
+            durationSector3 = dto.durationSector3,
+            i1Speed = dto.i1Speed,
+            i2Speed = dto.i2Speed,
+            stSpeed = dto.stSpeed,
+            isPitOutLap = dto.isPitOutLap,
+            segmentsSector1 = dto.segmentsSector1,
+            segmentsSector2 = dto.segmentsSector2,
+            segmentsSector3 = dto.segmentsSector3,
+            dateStart = dto.dateStart.toInstantOrNull()
+        )
+    }
 }
