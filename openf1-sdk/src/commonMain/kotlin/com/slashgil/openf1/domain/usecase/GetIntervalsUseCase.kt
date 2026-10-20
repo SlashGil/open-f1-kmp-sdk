@@ -4,6 +4,8 @@ import com.slashgil.openf1.domain.model.DriverInterval
 import com.slashgil.openf1.domain.model.specifier.MeetingSpecifier
 import com.slashgil.openf1.domain.model.specifier.SessionSpecifier
 import com.slashgil.openf1.domain.repository.RaceEventRepository
+import com.slashgil.openf1.domain.result.Result
+import com.slashgil.openf1.domain.result.asResult
 
 class GetIntervalsUseCase(
     private val raceEventRepository: RaceEventRepository
@@ -17,4 +19,12 @@ class GetIntervalsUseCase(
         driverNumber = driverNumber,
         meetingKey = meetingKey
     )
+
+    suspend fun asResult(
+        sessionKey: SessionSpecifier? = null,
+        driverNumber: Int? = null,
+        meetingKey: MeetingSpecifier? = null
+    ): Result<List<DriverInterval>> = com.slashgil.openf1.domain.result.asResult {
+        invoke(sessionKey, driverNumber, meetingKey)
+    }
 }

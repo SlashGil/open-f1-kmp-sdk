@@ -5,6 +5,8 @@ import com.slashgil.openf1.domain.model.SessionLeaderboardEntry
 import com.slashgil.openf1.domain.model.specifier.SessionSpecifier
 import com.slashgil.openf1.domain.repository.DriverRepository
 import com.slashgil.openf1.domain.repository.RaceEventRepository
+import com.slashgil.openf1.domain.result.Result
+import com.slashgil.openf1.domain.result.asResult
 
 class GetSessionLeaderboardUseCase(
     private val driverRepository: DriverRepository,
@@ -47,5 +49,11 @@ class GetSessionLeaderboardUseCase(
             sessionKey = actualSessionKey,
             entries = entries
         )
+    }
+
+    suspend fun asResult(
+        sessionKey: SessionSpecifier = SessionSpecifier.Latest
+    ): Result<SessionLeaderboard> = asResult {
+        invoke(sessionKey)
     }
 }
