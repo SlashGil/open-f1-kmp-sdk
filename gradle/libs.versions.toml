@@ -4,6 +4,7 @@ detekt = "1.23.8"
 junit = "4.13.2"
 kotlin = "2.1.10"
 kotlinxCoroutines = "1.10.1"
+kotlinxDatetime = "0.6.1"
 kotlinxSerialization = "1.8.0"
 ktor = "3.1.1"
 mavenPublish = "0.30.0"
@@ -25,6 +26,7 @@ ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 # KotlinX
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }

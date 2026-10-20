@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.datetime)
         }
 
         commonTest.dependencies {
@@ -100,7 +101,7 @@ mavenPublishing {
     coordinates("io.github.slashgil.openf1", "openf1-sdk", "1.0.0")
 
     publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
-    signAllPublications()
+    // signAllPublications()
 
     pom {
         name.set("OpenF1 Kotlin Multiplatform SDK")
