@@ -1,6 +1,7 @@
 package com.slashgil.openf1.domain.model
 
 import kotlinx.datetime.Instant
+import kotlin.math.roundToInt
 
 data class LapTiming(
     val driverNumber: Int?,
@@ -23,24 +24,21 @@ data class LapTiming(
     val formattedLapDuration: String?
         get() {
             val seconds = lapDuration ?: return null
-            val mins = (seconds / 60).toInt()
-            val remSecs = seconds % 60
+            val totalMillis = (seconds * 1000).roundToInt()
+            val mins = totalMillis / 60000
+            val remMillis = totalMillis % 60000
+            val secs = remMillis / 1000
+            val fracPart = remMillis % 1000
+            val fracStr = when {
+                fracPart < 10 -> "00$fracPart"
+                fracPart < 100 -> "0$fracPart"
+                else -> "$fracPart"
+            }
+            val secStr = if (mins > 0 && secs < 10) "0$secs" else "$secs"
             return if (mins > 0) {
-                val secStr = if (remSecs < 10) "0${remSecs.formatThreeDecimals()}" else remSecs.formatThreeDecimals()
-                "$mins:$secStr"
+                "$mins:$secStr.$fracStr"
             } else {
-                remSecs.formatThreeDecimals()
+                "$secs.$fracStr"
             }
         }
-
-    private fun Double.formatThreeDecimals(): String {
-        val intPart = this.toInt()
-        val fracPart = ((this - intPart) * 1000).toInt()
-        val fracStr = when {
-            fracPart < 10 -> "00$fracPart"
-            fracPart < 100 -> "0$fracPart"
-            else -> "$fracPart"
-        }
-        return "$intPart.$fracStr"
-    }
 }
