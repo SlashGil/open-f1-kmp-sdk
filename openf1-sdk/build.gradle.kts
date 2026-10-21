@@ -99,10 +99,7 @@ detekt {
 }
 
 mavenPublishing {
-    coordinates("io.github.slashgil.openf1", "openf1-sdk", "1.0.1")
-
-    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
-    // signAllPublications()
+    coordinates("com.github.slashgil.open-f1", "openf1-sdk", "1.0.1")
 
     pom {
         name.set("OpenF1 Kotlin Multiplatform SDK")
