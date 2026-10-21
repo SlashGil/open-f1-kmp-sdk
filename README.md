@@ -4,7 +4,7 @@ A strongly-typed, pure data layer Kotlin Multiplatform (KMP) SDK for the complet
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue.svg?logo=kotlin)](https://kotlinlang.org)
 [![Ktor](https://img.shields.io/badge/Ktor-3.1.1-orange.svg)](https://ktor.io)
-[![JitPack](https://jitpack.io/v/slashgil/open-f1.svg)](https://jitpack.io/#slashgil/open-f1)
+[![JitPack](https://jitpack.io/v/SlashGil/open-f1-kmp-sdk.svg)](https://jitpack.io/#SlashGil/open-f1-kmp-sdk)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
