@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "io.github.slashgil.openf1"
-version = "1.0.0"
+version = "1.0.1"
 
 kotlin {
     jvm {
@@ -46,6 +46,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
+            implementation(libs.koin.core)
         }
 
         commonTest.dependencies {
@@ -98,7 +99,7 @@ detekt {
 }
 
 mavenPublishing {
-    coordinates("io.github.slashgil.openf1", "openf1-sdk", "1.0.0")
+    coordinates("io.github.slashgil.openf1", "openf1-sdk", "1.0.1")
 
     publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     // signAllPublications()
