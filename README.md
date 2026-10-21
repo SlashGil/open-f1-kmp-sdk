@@ -78,6 +78,41 @@ val customClient = OpenF1Client(
 )
 ```
 
+#### Dependency Injection (DI) Support
+
+The SDK provides both a framework-agnostic pure Kotlin container and a Koin Multiplatform module out of the box:
+
+##### Option A: Framework-Agnostic Container (`OpenF1Sdk`)
+```kotlin
+import com.slashgil.openf1.di.OpenF1Sdk
+import com.slashgil.openf1.domain.model.specifier.SessionSpecifier
+
+// Instantiate pure Kotlin DI container
+val sdk = OpenF1Sdk.create()
+
+// Access Repositories or Use Cases
+val leaderboard = sdk.getSessionLeaderboardUseCase(SessionSpecifier.Latest)
+val drivers = sdk.driverRepository.getDrivers(sessionKey = SessionSpecifier.Latest)
+
+// Close underlying resources when finished
+sdk.close()
+```
+
+##### Option B: Koin Multiplatform Module (`openF1Module`)
+```kotlin
+import com.slashgil.openf1.di.openF1Module
+import org.koin.core.context.startKoin
+
+startKoin {
+    modules(openF1Module())
+}
+
+// Inject in ViewModel / Presenter
+class RaceViewModel(
+    private val getSessionLeaderboardUseCase: GetSessionLeaderboardUseCase
+)
+```
+
 ---
 
 ### 2. Discovering Sessions & Meetings (`session_key` / `meeting_key`)
