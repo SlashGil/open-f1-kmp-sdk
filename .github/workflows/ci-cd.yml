@@ -36,14 +36,8 @@ jobs:
       - name: Step 2 - Unit Tests
         run: ./gradlew openf1-sdk:jvmTest
 
-      - name: Step 3 - Publish to Maven Central (Sonatype Central Portal)
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
-        run: ./gradlew openf1-sdk:publishToMavenCentral --no-configuration-cache
-        env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_TOKEN_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_TOKEN_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Step 3 - Verify Maven Local Publication
+        run: ./gradlew :shared:publishToMavenLocal
 
       - name: Step 4 - Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
