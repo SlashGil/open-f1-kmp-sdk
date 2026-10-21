@@ -4,7 +4,7 @@ A strongly-typed, pure data layer Kotlin Multiplatform (KMP) SDK for the complet
 
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue.svg?logo=kotlin)](https://kotlinlang.org)
 [![Ktor](https://img.shields.io/badge/Ktor-3.1.1-orange.svg)](https://ktor.io)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.slashgil.openf1/openf1-sdk.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.slashgil.openf1/openf1-sdk)
+[![JitPack](https://jitpack.io/v/slashgil/open-f1.svg)](https://jitpack.io/#slashgil/open-f1)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
@@ -21,15 +21,16 @@ A strongly-typed, pure data layer Kotlin Multiplatform (KMP) SDK for the complet
 
 ## 📦 Installation
 
-Add the dependency to your project's `build.gradle.kts`:
+Add JitPack repository and dependency to your project's `build.gradle.kts`:
 
 ```kotlin
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 dependencies {
-    implementation("io.github.slashgil.openf1:openf1-sdk:1.0.0")
+    implementation("com.github.slashgil.open-f1:openf1-sdk:v1.0.1")
 }
 ```
 
