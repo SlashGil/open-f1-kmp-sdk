@@ -28,3 +28,4 @@ dependencyResolutionManagement {
 }
 
 include(":openf1-sdk")
+include(":sample")
