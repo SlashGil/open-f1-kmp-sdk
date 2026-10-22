@@ -311,6 +311,12 @@ io.github.slashgil.openf1
 ./gradlew openf1-sdk:detekt openf1-sdk:lintRelease openf1-sdk:jvmTest
 ```
 
+### Consumer Sample Verification (:sample)
+The project includes a `:sample` KMP consumer module validating cross-platform compilation in `commonMain` across Android, JVM, iOS, JS, and Wasm JS targets:
+```bash
+./gradlew sample:compileKotlinJvm sample:compileKotlinJs sample:compileKotlinWasmJs
+```
+
 ### Publish Locally
 ```bash
 ./gradlew publishToMavenLocal
